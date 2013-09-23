@@ -21,14 +21,14 @@ import javax.crypto.spec.IvParameterSpec;
 /**
  * Created by goof_troop on 9/12/13.
  */
-public class Crypto {
+public class Encryptor {
 
     private volatile Cipher cipher;
     private volatile AlgorithmParameters params;
     private volatile CryptoManager manager;
     private volatile byte[] iv;
 
-    public Crypto() {
+    public Encryptor() {
 
         manager = CryptoManager.getInstance();
 
@@ -56,13 +56,17 @@ public class Crypto {
         }
 
         try {
+
             cipher.init(Cipher.ENCRYPT_MODE, manager.getSecret());
+
         } catch (InvalidKeyException e) {
             // logger
         }
 
         try {
+
             iv = cipher.getParameters().getParameterSpec(IvParameterSpec.class).getIV();
+
         } catch (InvalidParameterSpecException e) {
             // logger
         }

@@ -1,5 +1,7 @@
 package com.app.boink.server.controller;
 
+import com.app.boink.server.security.SRKG;
+
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.KeySpec;
@@ -11,16 +13,14 @@ import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.SecretKeySpec;
 
-/**
- * Created by goof_troop on 9/13/13.
- */
-// TODO: auto task to re generate password and salt
+// TODO: copy to client. server and client will have seperate encryption managers.
+// TODO for the client, it'll be file encryption on pickle. for the server, it'll be obfuscation on the data in the DB
 public class CryptoManager implements Observer {
 
     private volatile SecretKey secret;
     private volatile char[] password;
     private volatile byte[] salt;
-    private SecretKeyFactory factory;
+    private volatile SecretKeyFactory factory;
 
     private static CryptoManager instance = null;
 
@@ -35,7 +35,9 @@ public class CryptoManager implements Observer {
     private CryptoManager() {
 
         try {
+
             factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
+
         } catch (NoSuchAlgorithmException e) {
             // logger
         }
@@ -49,14 +51,16 @@ public class CryptoManager implements Observer {
         KeySpec spec = new PBEKeySpec(password, salt, 65536, 256);
 
         try {
+
             secret = new SecretKeySpec(factory.generateSecret(spec).getEncoded(), "AES");
+
         } catch (InvalidKeySpecException e) {
             // logger
         }
     }
 
     private void reKey() {
-        // on update, reKey
+        // on update, reKey every file within
     }
 
     public SecretKey getSecret() {
@@ -66,12 +70,8 @@ public class CryptoManager implements Observer {
     @Override
     public void update(Observable observable, Object o) {
 
-        if (o instanceof char[])
-            password = (char[]) o;
-        else if (o instanceof byte[])
-            salt = (byte[]) o;
-        else
-            return;
+        password = SRKG.getPassword();
+        salt = SRKG.getSalt();
 
         generate();
         reKey();

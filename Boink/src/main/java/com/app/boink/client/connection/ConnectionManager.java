@@ -38,7 +38,7 @@ public class ConnectionManager {
      */
     private ConnectionManager(boolean isRemote) {
         try {
-            conn = isRemote ? new InternetAdapter() : new LocalAdapter();
+            conn = isRemote ? new RemoteAdapter() : new LocalAdapter();
         } catch (Exception e) {
             // logger
         }

@@ -1,7 +1,6 @@
 package com.app.boink.client.security;
 
 import com.app.boink.model.data.BoinkObject;
-import com.app.boink.server.controller.CryptoManager;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -27,16 +26,19 @@ import javax.crypto.spec.SecretKeySpec;
 /**
  * Created by goof_troop on 9/12/13.
  */
-public class Crypto {
+public class ClientEncryptor {
 
+    private volatile SecretKey secret;
+    private volatile char[] password;
+    private volatile byte[] salt;
+    private volatile SecretKeyFactory factory;
     private volatile Cipher cipher;
     private volatile AlgorithmParameters params;
-    private volatile CryptoManager manager;
     private volatile byte[] iv;
 
-    public Crypto() {
+    public ClientEncryptor() {
 
-        manager = CryptoManager.getInstance();
+        // get the password and the salt from the server (this is pulled from the crypto manager). this will require ssl auth
 
         init();
     }
@@ -52,6 +54,24 @@ public class Crypto {
     private void init() {
 
         try {
+
+            factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
+
+        } catch (NoSuchAlgorithmException e) {
+            // logger
+        }
+
+        KeySpec spec = new PBEKeySpec(password, salt, 65536, 256);
+
+        try {
+
+            secret = new SecretKeySpec(factory.generateSecret(spec).getEncoded(), "AES");
+
+        } catch (InvalidKeySpecException e) {
+            // logger
+        }
+
+        try {
             cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
         } catch (NoSuchPaddingException e) {
             // logger
@@ -60,7 +80,7 @@ public class Crypto {
         }
 
         try {
-            cipher.init(Cipher.ENCRYPT_MODE, manager.getSecret());
+            cipher.init(Cipher.ENCRYPT_MODE, secret);
         } catch (InvalidKeyException e) {
             // logger
         }
@@ -121,7 +141,7 @@ public class Crypto {
         try {
 
             cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
-            cipher.init(Cipher.DECRYPT_MODE, manager.getSecret(), new IvParameterSpec(iv));
+            cipher.init(Cipher.DECRYPT_MODE, secret, new IvParameterSpec(iv));
 
             return new String(cipher.doFinal(content), "UTF-8");
 
@@ -156,7 +176,7 @@ public class Crypto {
         try {
 
             cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
-            cipher.init(Cipher.DECRYPT_MODE, manager.getSecret(), new IvParameterSpec(iv));
+            cipher.init(Cipher.DECRYPT_MODE, secret, new IvParameterSpec(iv));
 
             return object.getObject(cipher);
 

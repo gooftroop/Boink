@@ -1,14 +1,15 @@
 package com.app.boink.server.network;
 
 import com.app.boink.exception.PickleException;
+import com.app.boink.model.data.Profile;
 import com.app.boink.server.controller.Pickler;
 
 import java.util.HashMap;
-import com.app.boink.model.data.Profile;
 
 /**
  * Created by goof_troop on 9/12/13.
  */
+// TODO this is local connection only. figure out how exactly you're going to handle socket connections, then implement dual functionality
 public class AuthenticatorService {
 
     private Profile profile;

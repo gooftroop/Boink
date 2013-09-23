@@ -1,6 +1,6 @@
-package com.app.boink.model.data;
+package com.app.boink.model.packet;
 
-import java.io.Serializable;
+import com.app.boink.model.data.BoinkObject;
 
 /**
  * Created by goof_troop on 9/12/13.

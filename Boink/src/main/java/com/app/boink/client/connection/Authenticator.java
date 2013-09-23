@@ -1,10 +1,10 @@
 package com.app.boink.client.connection;
 
 import com.app.boink.exception.ClientConnectException;
-import com.app.boink.model.data.AuthPacket;
 import com.app.boink.model.data.BoinkObject;
-import com.app.boink.model.data.RegisterPacket;
-import com.app.boink.model.data.UpdatePacket;
+import com.app.boink.model.packet.AuthPacket;
+import com.app.boink.model.packet.ProfileUpdatePacket;
+import com.app.boink.model.packet.RegisterPacket;
 
 import java.util.HashMap;
 
@@ -95,11 +95,11 @@ public class Authenticator {
         if (client == null)
             return false;
 
-        if (!client.write((BoinkObject) new UpdatePacket(info)))
+        if (!client.write((BoinkObject) new ProfileUpdatePacket(info)))
             return false;
 
         try {
-            return ((UpdatePacket) client.read()).isUpdated();
+            return ((ProfileUpdatePacket) client.read()).isUpdated();
         } catch (NullPointerException e) {
             return false;
         }

@@ -1,7 +1,7 @@
 package com.app.boink.model.data;
 
-import java.io.Serializable;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
 
@@ -16,12 +16,14 @@ public class Account extends BoinkObject {
     private String accountName;
 
     private HashMap<Integer, Transaction> account;
+    private LinkedList<Task> autoTasks;
 
     public Account() {
 
         super();
 
         account = new HashMap<Integer, Transaction>();
+        autoTasks = new LinkedList<Task>();
         uuid = UUID.randomUUID().toString();
     }
 
@@ -47,6 +49,12 @@ public class Account extends BoinkObject {
             throw new NullPointerException();
 
         this.accountName = accountName;
+    }
+
+    public void addTask(Task t) {
+
+        if (t != null)
+            autoTasks.add(t);
     }
 
     public Transaction getTransaction(int id) {

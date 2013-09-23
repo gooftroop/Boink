@@ -1,5 +1,9 @@
 package com.app.boink.server.controller;
 
+import com.app.boink.exception.ErrorCode;
+import com.app.boink.exception.PickleException;
+import com.app.boink.model.data.BoinkObject;
+
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -8,13 +12,10 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.HashMap;
 
-import com.app.boink.exception.ErrorCode;
-import com.app.boink.exception.PickleException;
-import com.app.boink.model.data.BoinkObject;
-
 /**
  * Created by goof_troop on 9/12/13.
  */
+// Stand-alone client ONLY. Profile information is stored in private dir
 public class Pickler {
 
     private static HashMap<String, String> reference = null;
@@ -123,9 +124,9 @@ public class Pickler {
 
         try {
 
-            o = (BoinkObject)ois.readObject();
+            o = (BoinkObject) ois.readObject();
 
-        } catch(IOException e) {
+        } catch (IOException e) {
             // logger
             throw new PickleException(ErrorCode.OBJECT_READ_ERROR);
         } catch (ClassCastException e) {

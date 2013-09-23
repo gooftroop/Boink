@@ -1,7 +1,4 @@
-package com.app.boink.client.main;
-
-import com.app.boink.R;
-import com.app.boink.util.SystemUiHider;
+package com.app.boink.client.view;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
@@ -10,6 +7,9 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.view.MotionEvent;
 import android.view.View;
+
+import com.app.boink.R;
+import com.app.boink.util.SystemUiHider;
 
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
@@ -63,44 +63,44 @@ public class Register extends Activity {
         mSystemUiHider.setup();
         mSystemUiHider.setOnVisibilityChangeListener(new SystemUiHider.OnVisibilityChangeListener() {
 
-                    // Cached values.
-                    int mControlsHeight;
-                    int mShortAnimTime;
+            // Cached values.
+            int mControlsHeight;
+            int mShortAnimTime;
 
-                    @Override
-                    @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
-                    public void onVisibilityChange(boolean visible) {
+            @Override
+            @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
+            public void onVisibilityChange(boolean visible) {
 
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
 
-                            // If the ViewPropertyAnimator API is available
-                            // (Honeycomb MR2 and later), use it to animate the
-                            // in-layout UI controls at the bottom of the
-                            // screen.
-                            if (mControlsHeight == 0)
-                                mControlsHeight = controlsView.getHeight();
+                    // If the ViewPropertyAnimator API is available
+                    // (Honeycomb MR2 and later), use it to animate the
+                    // in-layout UI controls at the bottom of the
+                    // screen.
+                    if (mControlsHeight == 0)
+                        mControlsHeight = controlsView.getHeight();
 
-                            if (mShortAnimTime == 0)
-                                mShortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
+                    if (mShortAnimTime == 0)
+                        mShortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
 
-                            controlsView.animate()
-                                    .translationY(visible ? 0 : mControlsHeight)
-                                    .setDuration(mShortAnimTime);
+                    controlsView.animate()
+                            .translationY(visible ? 0 : mControlsHeight)
+                            .setDuration(mShortAnimTime);
 
-                        } else {
+                } else {
 
-                            // If the ViewPropertyAnimator APIs aren't
-                            // available, simply show or hide the in-layout UI
-                            // controls.
-                            controlsView.setVisibility(visible ? View.VISIBLE : View.GONE);
-                        }
+                    // If the ViewPropertyAnimator APIs aren't
+                    // available, simply show or hide the in-layout UI
+                    // controls.
+                    controlsView.setVisibility(visible ? View.VISIBLE : View.GONE);
+                }
 
-                        if (visible && AUTO_HIDE) {
-                            // Schedule a hide().
-                            delayedHide(AUTO_HIDE_DELAY_MILLIS);
-                        }
-                    }
-                });
+                if (visible && AUTO_HIDE) {
+                    // Schedule a hide().
+                    delayedHide(AUTO_HIDE_DELAY_MILLIS);
+                }
+            }
+        });
 
         // Set up the user interaction to manually show or hide the system UI.
         contentView.setOnClickListener(new View.OnClickListener() {

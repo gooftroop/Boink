@@ -1,7 +1,4 @@
-package com.app.boink.client.main;
-
-import com.app.boink.R;
-import com.app.boink.util.SystemUiHider;
+package com.app.boink.client.view;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
@@ -10,6 +7,9 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.view.MotionEvent;
 import android.view.View;
+
+import com.app.boink.R;
+import com.app.boink.util.SystemUiHider;
 
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.

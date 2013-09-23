@@ -1,8 +1,5 @@
 package com.app.boink.server.network;
 
-import com.app.boink.model.packet.AccountPacket;
-import com.app.boink.model.packet.ProfileUpdatePacket;
-
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -12,22 +9,18 @@ import io.netty.channel.SimpleChannelInboundHandler;
 /**
  * Handles a server-side channel.
  */
-public class ServerHandler extends SimpleChannelInboundHandler<Object> {
+public class SSOServerHandler extends SimpleChannelInboundHandler<String> {
 
-    public ServerHandler() {
+    public SSOServerHandler() {
 
     }
 
     @Override
-    protected void channelRead0(ChannelHandlerContext ctx, Object o) throws Exception {
+    protected void channelRead0(ChannelHandlerContext ctx, String msg) throws Exception {
 
         // check the object coming in
-
-        if (o instanceof ProfileUpdatePacket) {
-
-        } else if (o instanceof AccountPacket) {
-
-        }
+        // it should be encrypted - I need to figure this out
+        // and it needs to be returned encrypted
 
     }
 
@@ -38,7 +31,7 @@ public class ServerHandler extends SimpleChannelInboundHandler<Object> {
 
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
-        Logger.getLogger(ServerHandler.class.getName()).log(Level.WARNING, "Unexpected exception from downstream.", cause);
+        Logger.getLogger(SSOServerHandler.class.getName()).log(Level.WARNING, "Unexpected exception from downstream.", cause);
         ctx.close();
     }
 }

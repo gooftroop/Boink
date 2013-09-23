@@ -1,12 +1,13 @@
-package com.app.boink.model.data;
+package com.app.boink.model.packet;
 
-import java.io.Serializable;
+import com.app.boink.model.data.BoinkObject;
+
 import java.util.HashMap;
 
 /**
  * Created by goof_troop on 9/12/13.
  */
-public class UpdatePacket extends BoinkObject {
+public class ProfileUpdatePacket extends BoinkObject {
 
     private static final long serialVersionUID = 0;
 
@@ -14,7 +15,7 @@ public class UpdatePacket extends BoinkObject {
 
     private boolean updated;
 
-    public UpdatePacket(HashMap<String, String> info) {
+    public ProfileUpdatePacket(HashMap<String, String> info) {
 
         super();
 

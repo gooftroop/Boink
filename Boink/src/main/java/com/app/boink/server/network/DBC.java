@@ -1,10 +1,9 @@
 package com.app.boink.server.network;
 
-import java.sql.*;
-
 /**
  * Created by goof_troop on 9/12/13.
  */
+// Server application ONLY. Used to connect to the Database
 public class DBC {
 
     private static java.sql.Connection conn = null;

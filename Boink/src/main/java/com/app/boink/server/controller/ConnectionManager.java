@@ -3,9 +3,8 @@ package com.app.boink.server.controller;
 import com.app.boink.exception.ClientConnectException;
 import com.app.boink.exception.ErrorCode;
 import com.app.boink.model.data.BoinkObject;
-import com.app.boink.server.network.Connection;
-import com.app.boink.server.network.InternetAdapter;
-import com.app.boink.server.network.LocalAdapter;
+import com.app.boink.server.network.LocalServer;
+import com.app.boink.server.network.SecureServer;
 
 /**
  * Created by goof_troop on 9/12/13.
@@ -41,7 +40,7 @@ public class ConnectionManager {
      *
      */
     private ConnectionManager(boolean isRemote) {
-        conn = isRemote ? new InternetAdapter() : new LocalAdapter();
+        conn = isRemote ? new SecureServer() : new LocalServer();
     }
 
     /*

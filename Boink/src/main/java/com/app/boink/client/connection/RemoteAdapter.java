@@ -1,27 +1,23 @@
 package com.app.boink.client.connection;
 
 import com.app.boink.model.data.BoinkObject;
+
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
-import io.netty.channel.ChannelFuture;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioSocketChannel;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-
 /**
  * Created by goof_troop on 9/12/13.
  */
-public class InternetAdapter extends Connection {
+public class RemoteAdapter extends Connection {
 
     private Bootstrap b;
     private Channel ch;
     private EventLoopGroup group;
-    private lastWriteFuture lwf;
 
-    public InternetAdapter() {
+    public RemoteAdapter() {
 
         group = new NioEventLoopGroup();
 
@@ -53,7 +49,7 @@ public class InternetAdapter extends Connection {
             return false;
         }
 
-        if ( b == null)
+        if (b == null)
             return false;
 
         return true;
@@ -67,9 +63,6 @@ public class InternetAdapter extends Connection {
             // logger
         }
 
-        if (lwf != null)
-            lwf.sync();
-
         group.shutdownGracefully();
     }
 
@@ -78,6 +71,16 @@ public class InternetAdapter extends Connection {
      */
     @Override
     public boolean write(BoinkObject data) {
+
+        return false;
+    }
+
+    public boolean write(String msg) {
+
+        // write for SSO. This is obfuscated for security
+        // encrypt? right now server and client have different encryption slat and password...we can't
+        // encrypt using the existing AES since we're not garaunteed that its readable. So how do we deal with this?
+
         return false;
     }
 
@@ -86,6 +89,10 @@ public class InternetAdapter extends Connection {
      */
     @Override
     public Object read() {
+
+        // read. If its a String, we've got SSO going. it should be encrypted
+        // If its a BoinkObject, its normal operations
+
         return null;
     }
 

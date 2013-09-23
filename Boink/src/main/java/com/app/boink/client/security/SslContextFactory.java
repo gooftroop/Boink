@@ -1,4 +1,4 @@
-package com.app.boink.server.security;
+package com.app.boink.client.security;
 
 import java.io.UnsupportedEncodingException;
 import java.security.KeyStore;
@@ -9,12 +9,38 @@ import java.security.SecureRandom;
 import java.security.Security;
 import java.security.UnrecoverableKeyException;
 
+import javax.net.ssl.KeyManager;
 import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLEngine;
+import javax.net.ssl.TrustManager;
 import javax.net.ssl.TrustManagerFactory;
 
-// TODO copy this over to client, but the seed MUST be provided when the client first connects with
-// TODO a one-time password. The CONTEXT MUST be stored for future communications
+import io.netty.handler.ssl.SslHandler;
+
+/**
+ * Creates a bogus {@link SSLContext}.  A client-side context created by this
+ * factory accepts any certificate even if it is invalid.  A server-side context
+ * created by this factory sends a bogus certificate defined in {@link KeyStore}.
+ * <p/>
+ * You will have to create your context differently in a real world application.
+ * <p/>
+ * <h3>Client Certificate Authentication</h3>
+ * <p/>
+ * To enable client certificate authentication:
+ * <ul>
+ * <li>Enable client authentication on the server side by calling
+ * {@link SSLEngine#setNeedClientAuth(boolean)} before creating
+ * {@link SslHandler}.</li>
+ * <li>When initializing an {@link SSLContext} on the client side,
+ * specify the {@link KeyManager} that contains the client certificate as
+ * the first argument of {@link SSLContext#init(KeyManager[], TrustManager[], SecureRandom)}.</li>
+ * <li>When initializing an {@link SSLContext} on the server side,
+ * specify the proper {@link TrustManager} as the second argument of
+ * {@link SSLContext#init(KeyManager[], TrustManager[], SecureRandom)}
+ * to validate the client certificate.</li>
+ * </ul>
+ */
 public final class SslContextFactory {
 
     private static final String PROTOCOL = "TLS";
@@ -38,7 +64,8 @@ public final class SslContextFactory {
 
             SecureRandom sec = SecureRandom.getInstance("SHA1PRNG", "SUN");
             sec.nextBytes(new byte[64]);
-            byte[] seed = sec.generateSeed(64);
+            // TODO seed needs to be pulled from some sort of secure store
+            byte[] seed = null;
 
             // Set up key manager factory to use our key store
             kmf = KeyManagerFactory.getInstance(algorithm);
