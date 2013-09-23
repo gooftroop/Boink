@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.app.boink"
     android:versionCode="1"
-    android:versionName="1.0" >
+    android:versionName="1.0">
 
     <uses-sdk
         android:minSdkVersion="14"
@@ -15,10 +15,10 @@
         android:theme="@style/AppTheme"
         android:name=".client.connection.TestApp">
         <activity
-            android:name="com.app.boink.client.main.Boink"
+            android:name=".client.view.Boink"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/app_name"
-            android:theme="@style/FullscreenTheme" >
+            android:theme="@style/FullscreenTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -28,14 +28,12 @@
         <activity
             android:name="com.app.boink.Login"
             android:label="@string/title_activity_login"
-            android:windowSoftInputMode="adjustResize|stateVisible" >
-        </activity>
+            android:windowSoftInputMode="adjustResize|stateVisible"></activity>
         <activity
             android:name="com.app.boink.Register"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/title_activity_register"
-            android:theme="@style/FullscreenTheme" >
-        </activity>
+            android:theme="@style/FullscreenTheme"></activity>
 
     </application>
 
