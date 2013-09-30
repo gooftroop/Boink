@@ -1,10 +1,10 @@
 package com.app.boink.client.connection;
 
 import com.app.boink.exception.ClientConnectException;
-import com.app.boink.model.data.BoinkObject;
-import com.app.boink.model.packet.AuthPacket;
-import com.app.boink.model.packet.ProfileUpdatePacket;
-import com.app.boink.model.packet.RegisterPacket;
+import com.app.boink.packet.AuthPacket;
+import com.app.boink.packet.ProfileUpdatePacket;
+import com.app.boink.packet.RegisterPacket;
+import com.app.boink.prototype.BoinkObject;
 
 import java.util.HashMap;
 

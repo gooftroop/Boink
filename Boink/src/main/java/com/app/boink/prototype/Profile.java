@@ -1,13 +1,12 @@
-package com.app.boink.model.data;
+package com.app.boink.prototype;
 
-import java.io.Serializable;
 import java.util.HashMap;
 import java.util.UUID;
 
 /**
  * Created by goof_troop on 9/12/13.
  */
-public class Profile extends BoinkObject  {
+public class Profile extends BoinkObject {
 
     private static final long serialVersionUID = 0;
 
@@ -33,6 +32,15 @@ public class Profile extends BoinkObject  {
         uuid = UUID.randomUUID().toString();
     }
 
+    public Profile(final String userName, final String password) {
+
+        this();
+
+        this.userName = userName;
+        this.password = password;
+
+    }
+
     public String getUUID() {
         return uuid;
     }
@@ -45,7 +53,7 @@ public class Profile extends BoinkObject  {
 
         if (commonName == null) {
             // logger
-            throw new NullPointerException();
+            // exception
         }
 
         this.commonName = commonName;
@@ -55,162 +63,140 @@ public class Profile extends BoinkObject  {
         return firstName;
     }
 
-    public void setFirstName(String firstName) {
+    public boolean setFirstName(String firstName) {
 
         if (firstName == null) {
             // logger
-            throw new NullPointerException();
+            return false;
         }
 
         this.firstName = firstName;
+        return true;
     }
 
     public String getLastName() {
         return lastName;
     }
 
-    public void setLastName(String lastName) {
+    public boolean setLastName(String lastName) {
 
         if (lastName == null) {
             // logger
-            throw new NullPointerException();
+            return false;
         }
 
         this.lastName = lastName;
+        return true;
     }
 
     public String getMiddleName() {
         return middleName;
     }
 
-    public void setMiddleName(String middleName) {
+    public boolean setMiddleName(String middleName) {
 
         if (middleName == null) {
             // logger
-            throw new NullPointerException();
+            return false;
         }
 
         this.middleName = middleName;
+        return true;
     }
 
     public String getSalutation() {
         return salutation;
     }
 
-    public void setSalutation(String salutation) {
+    public boolean setSalutation(String salutation) {
 
         if (salutation == null) {
             // logger
-            throw new NullPointerException();
+            return false;
         }
 
         this.salutation = salutation;
+        return true;
     }
 
     public String getSuffix() {
         return suffix;
     }
 
-    public void setSuffix(String suffix) {
+    public boolean setSuffix(String suffix) {
 
         if (suffix == null) {
             // logger
-            throw new NullPointerException();
+            return false;
         }
 
         this.suffix = suffix;
+        return true;
     }
 
     public String getEmail() {
         return email;
     }
 
-    public void setEmail(String email) {
+    public boolean setEmail(String email) {
 
         if (email == null) {
             // logger
-            throw new NullPointerException();
+            return false;
         }
 
         this.email = email;
+        return true;
     }
 
     public String getPassword() {
         return password;
     }
 
-    public void setPassword(String password) {
+    public boolean setPassword(String password) {
 
         if (password == null) {
             // logger
-            throw new NullPointerException();
+            return false;
         }
 
         this.password = password;
+        return true;
     }
 
     public String getUserName() {
         return userName;
     }
 
-    public void setUserName(String userName) {
+    public boolean setUserName(String userName) {
 
         if (userName == null) {
             // logger
-            throw new NullPointerException();
+            return false;
         }
 
         this.userName = userName;
+        return true;
     }
 
-    public void update(String var, String value) {
+    public boolean update(String var, String value) {
 
-        if (var == null) {
-            // logger
-            throw new NullPointerException();
-        }
+        if ("firstName".equals(var))
+            return setFirstName(value);
+        else if ("lastName".equals(var))
+            return setLastName(value);
+        else if ("middleName".equals(var))
+            return setMiddleName(value);
+        else if ("salutation".equals(var))
+            return setSalutation(value);
+        else if ("suffix".equals(var))
+            return setSuffix(value);
+        else if ("email".equals(var))
+            return setEmail(value);
+        else if ("userName".equals(var))
+            return setUserName(value);
+        else
+            return "password".equals(var) && setPassword(value);
 
-        if ("firstName".equals(var)) {
-            setFirstName(value);
-        } else if ("lastName".equals(var)) {
-            setLastName(value);
-        } else if ("middleName".equals(var)) {
-            setMiddleName(value);
-        } else if ("salutation".equals(var)) {
-            setSalutation(value);
-        } else if ("suffix".equals(var)) {
-            setSuffix(value);
-        } else if ("email".equals(var)) {
-            setEmail(value);
-        } else if ("userName".equals(var)) {
-            setUserName(value);
-        } else if ("password".equals(var)) {
-            setPassword(value);
-        }
-    }
-
-    @Override
-    protected Object clone() throws CloneNotSupportedException {
-        throw new CloneNotSupportedException();
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        return super.equals(o);
-    }
-
-    @Override
-    protected void finalize() throws Throwable {
-        super.finalize();
-    }
-
-    @Override
-    public int hashCode() {
-        return super.hashCode();
-    }
-
-    @Override
-    public String toString() {
-        return super.toString();
     }
 }

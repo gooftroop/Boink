@@ -1,7 +1,7 @@
 package com.app.boink.server.network;
 
-import com.app.boink.model.packet.AccountPacket;
-import com.app.boink.model.packet.ProfileUpdatePacket;
+import com.app.boink.packet.BoinkPacket;
+import com.app.boink.server.controller.ConnectionManager;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -12,22 +12,19 @@ import io.netty.channel.SimpleChannelInboundHandler;
 /**
  * Handles a server-side channel.
  */
-public class ServerHandler extends SimpleChannelInboundHandler<Object> {
+public class ServerHandler extends SimpleChannelInboundHandler<BoinkPacket> {
 
     public ServerHandler() {
 
     }
 
     @Override
-    protected void channelRead0(ChannelHandlerContext ctx, Object o) throws Exception {
+    protected void channelRead0(ChannelHandlerContext ctx, BoinkPacket o) throws Exception {
 
-        // check the object coming in
-
-        if (o instanceof ProfileUpdatePacket) {
-
-        } else if (o instanceof AccountPacket) {
-
-        }
+        // fire off a new communication event.
+        // the event should have the session id to work on and
+        // the information to work with
+        ConnectionManager.connect(ctx);
 
     }
 

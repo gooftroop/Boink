@@ -1,6 +1,6 @@
 package com.app.boink.server.security;
 
-import com.app.boink.model.data.BoinkObject;
+import com.app.boink.prototype.BoinkObject;
 import com.app.boink.server.controller.CryptoManager;
 
 import java.io.IOException;

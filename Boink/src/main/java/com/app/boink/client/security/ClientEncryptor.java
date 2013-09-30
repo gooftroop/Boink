@@ -1,6 +1,6 @@
 package com.app.boink.client.security;
 
-import com.app.boink.model.data.BoinkObject;
+import com.app.boink.prototype.BoinkObject;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;

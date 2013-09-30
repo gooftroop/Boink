@@ -19,8 +19,6 @@ public class SSOServerHandler extends SimpleChannelInboundHandler<String> {
     protected void channelRead0(ChannelHandlerContext ctx, String msg) throws Exception {
 
         // check the object coming in
-        // it should be encrypted - I need to figure this out
-        // and it needs to be returned encrypted
 
     }
 

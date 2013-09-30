@@ -1,94 +1,92 @@
 package com.app.boink.server.network;
 
-import com.app.boink.exception.PickleException;
-import com.app.boink.model.data.Profile;
-import com.app.boink.server.controller.Pickler;
+import com.app.boink.prototype.Profile;
+import com.app.boink.prototype.Session;
 
 import java.util.HashMap;
 
 /**
  * Created by goof_troop on 9/12/13.
  */
-// TODO this is local connection only. figure out how exactly you're going to handle socket connections, then implement dual functionality
+
 public class AuthenticatorService {
 
-    private Profile profile;
-
-    public AuthenticatorService() {
-        profile = null;
-    }
-
-    public boolean authenticate(String userName, String password) {
+    public static boolean authenticate(String userName, String password, Session session) {
 
         // validate input
-
-        try {
-            profile = (Profile) Pickler.dePickle(userName);
-        } catch (PickleException e) {
-            return false;
-        } catch (NullPointerException e) {
-            return false;
+        if (userName == null || userName.isEmpty()) {
+            // exception
         }
+
+        if (password == null || password.isEmpty()) {
+            // exception
+        }
+
+        if (session == null || !session.isValid()) {
+            // exception
+        }
+
 
         // decrypt into temp string, then securely erase that string
-
-        return profile.getPassword().equals(password);
-    }
-
-    public boolean register(String userName, String password) {
-
-        // validate input
-
-        if (!Pickler.isRegistered(userName)) {
-
-            profile = new Profile();
-
-            profile.setCommonName(userName);
-            profile.setUserName(userName);
-
-            // password must be encrypted
-            profile.setPassword(password);
-
-            return true;
-        } else
-            return false;
-    }
-
-    public boolean updateUser(HashMap<String, String> info) {
-
-        // validate input
-
-        if (!info.containsKey("userName")) {
-            // logger
+        try {
+            return session.getProfile().getUserName().equals(userName) && session.getProfile().getPassword().equals(password);
+        } catch (NullPointerException e) {
+            // log
             return false;
         }
+    }
 
-        if (Pickler.isRegistered(info.get("userName"))) {
+    public static boolean register(String userName, String password, Session session) {
 
-            try {
-                profile = (Profile) Pickler.dePickle(info.get("userName"));
-            } catch (PickleException e) {
-                return false;
-            } catch (NullPointerException e) {
-                return false;
-            }
+        // validate input
+        if (userName == null || userName.isEmpty()) {
+            // exception
+        }
+
+        if (password == null || password.isEmpty()) {
+            // exception
+        }
+
+        if (session == null || !session.isValid()) {
+            // exception
+        }
+
+        if (session.getProfile() != null)
+            return false;
+        else {
+            session.setProfile(new Profile(userName, password));
+            return true;
+        }
+    }
+
+    // Can't call updateUser unless authentication has already occurred
+    public static boolean updateUser(HashMap<String, String> info, Session session) {
+
+        // validate input
+        if (info == null || info.isEmpty()) {
+            // exception
+        }
+
+        if (session == null || !session.isValid()) {
+            // exception
+        }
+
+        Profile profile;
+
+        if ((profile = session.getProfile()) == null) {
+            // error
+        }
+
+        try {
 
             for (String key : info.keySet())
                 profile.update(key, info.get(key));
 
-            return true;
+        } catch (NullPointerException e) {
 
-        } else
-            return false;
-    }
+        }
 
-    public Profile getProfile() {
-        // do secure auth here
-        return profile;
-    }
+        return true;
 
-    public void destroy() {
-        profile = null;
-        System.gc();
     }
 }

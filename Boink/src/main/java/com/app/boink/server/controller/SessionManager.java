@@ -1,6 +1,6 @@
 package com.app.boink.server.controller;
 
-import com.app.boink.model.data.Session;
+import com.app.boink.prototype.Session;
 
 import java.util.HashMap;
 

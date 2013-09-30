@@ -1,11 +1,11 @@
-package com.app.boink.model.data;
+package com.app.boink.prototype;
 
 import java.util.UUID;
 
 /**
  * Created by goof_troop on 9/12/13.
  */
-public class Transaction extends BoinkObject  {
+public class Transaction extends BoinkObject {
 
     private String uuid;
     private String commonName;

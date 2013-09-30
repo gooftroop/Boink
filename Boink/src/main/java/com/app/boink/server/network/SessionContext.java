@@ -1,5 +1,7 @@
 package com.app.boink.server.network;
 
+import com.app.boink.server.controller.ConnectionManager;
+
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 
@@ -20,5 +22,7 @@ public class SessionContext extends SimpleChannelInboundHandler<Object> {
         async session event with the session id and the object containing the action to be performed.
         The channel will then wait for write notification once the object has been processed
          */
+
+        ConnectionManager.addEventListener(ctx, new ConnectionHandler());
     }
 }

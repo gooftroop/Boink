@@ -1,94 +1,45 @@
 package com.app.boink.server.controller;
 
-import com.app.boink.exception.ClientConnectException;
-import com.app.boink.exception.ErrorCode;
-import com.app.boink.model.data.BoinkObject;
-import com.app.boink.server.network.LocalServer;
-import com.app.boink.server.network.SecureServer;
+import com.app.boink.prototype.ConnectionEvent;
+import com.app.boink.prototype.ConnectionListener;
+import com.app.boink.util.EventListenerList;
+
+import io.netty.channel.ChannelHandlerContext;
 
 /**
  * Created by goof_troop on 9/12/13.
  */
-public class ConnectionManager {
+public final class ConnectionManager {
 
-    private Connection conn;
-    private static ConnectionManager instance = null;
+    private static EventListenerList listenerList = new EventListenerList();
+    private static ConnectionManager self = null;
 
-    /*
-     *
-     */
-    public static ConnectionManager getInstance() throws ClientConnectException {
-
-        if (instance == null)
-            throw new ClientConnectException(ErrorCode.CONNECTION_CLIENT_INIT_ERROR);
-
-        // validate
-
-        return instance;
-
+    public ConnectionManager() {
+        self = this;
     }
 
-    /*
-     *
-     */
-    public void init(boolean isRemote) {
-        if (instance != null)
-            instance = new ConnectionManager(isRemote);
+
+    public synchronized static void connect(ChannelHandlerContext ctx) {
+
+        if (ctx != null)
+            fireCommunicationEvent(ctx);
     }
 
-    /*
-     *
-     */
-    private ConnectionManager(boolean isRemote) {
-        conn = isRemote ? new SecureServer() : new LocalServer();
+    public synchronized static void addEventListener(ChannelHandlerContext ctx, ConnectionListener listener) {
+        listenerList.add(ctx, listener);
     }
 
-    /*
-     *
-     */
-    public boolean listen() {
-        return conn.listen();
+    public synchronized static void removeEventListener(ChannelHandlerContext ctx, ConnectionListener listener) {
+        listenerList.remove(ctx, listener);
     }
 
-    /*
-     *
-     */
-    public boolean listen(int port) {
-        return conn.listen(port);
-    }
+    private static synchronized void fireCommunicationEvent(ChannelHandlerContext ctx) {
 
-    /*
-     *
-     */
-    public boolean write(BoinkObject data) {
-        return conn.write(data);
-    }
+        Object[] listeners = listenerList.getListenerList();
 
-    /*
-     *
-     */
-    public Object read() {
-        return conn.read();
-    }
+        for (int i = 0; i < listeners.length; i = i + 2)
+            if (listeners[i] == ChannelHandlerContext.class)
+                ((ConnectionListener) listeners[i + 1]).connectionEstablished(new ConnectionEvent(self, ctx));
 
-    /*
-     *
-     */
-    public int getPort() {
-        return conn.getPort();
-    }
-
-    /*
-     *
-     */
-    public int getIntAddr() {
-        return conn.getIntAddr();
-    }
-
-    /*
-     *
-     */
-    public boolean isAlive() {
-        return conn.isAlive();
     }
 }

@@ -1,6 +1,6 @@
 package com.app.boink.client.connection;
 
-import com.app.boink.model.data.BoinkObject;
+import com.app.boink.prototype.BoinkObject;
 
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;

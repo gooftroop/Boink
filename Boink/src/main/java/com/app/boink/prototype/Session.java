@@ -1,4 +1,4 @@
-package com.app.boink.model.data;
+package com.app.boink.prototype;
 
 import java.util.Collection;
 import java.util.Iterator;
@@ -14,16 +14,22 @@ public class Session extends BoinkObject {
 
     private static final long serialVersionUID = 0;
 
-    private Profile p = null;
+    private boolean invalid;
+
+    private Profile profile;
     private LinkedList<Account> accounts;
 
     private String sessionId = "";
 
-    public Session(Profile p) {
-        this.p = p;
-        accounts = new LinkedList<Account>();
+    public Session() {
 
+        invalid = false;
+        accounts = new LinkedList<Account>();
         sessionId = UUID.randomUUID().toString();
+    }
+
+    public void invalidate() {
+
     }
 
     public String getSessionId() {
@@ -31,7 +37,16 @@ public class Session extends BoinkObject {
     }
 
     public Profile getProfile() {
-        return p;
+        return profile;
+    }
+
+    public void setProfile(Profile p) {
+
+        if (p == null) {
+            // log and except
+        }
+
+        this.profile = p;
     }
 
     public void addAccount(Account a) {
@@ -61,5 +76,9 @@ public class Session extends BoinkObject {
     public Iterator<Account> getAccounts() {
 
         return accounts.iterator();
+    }
+
+    public boolean isValid() {
+        return !invalid;
     }
 }

@@ -2,7 +2,7 @@ package com.app.boink.server.controller;
 
 import com.app.boink.exception.ErrorCode;
 import com.app.boink.exception.PickleException;
-import com.app.boink.model.data.BoinkObject;
+import com.app.boink.prototype.Session;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -10,34 +10,18 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.util.HashMap;
 
 /**
  * Created by goof_troop on 9/12/13.
  */
-// Stand-alone client ONLY. Profile information is stored in private dir
 public class Pickler {
 
-    private static HashMap<String, String> reference = null;
-
     public Pickler() {
-        reference = new HashMap<String, String>();
     }
 
-    public static boolean isRegistered(String commonName) {
+    public static void pickle(Session session) throws PickleException {
 
-        if (reference == null) {
-            // logger
-            throw new NullPointerException();
-        }
-
-        return reference.containsKey(commonName);
-    }
-
-    // local implementation only. do DB
-    public static void pickle(BoinkObject data) throws PickleException {
-
-        if (reference == null) {
+        if (session == null) {
             // logger
             throw new NullPointerException();
         }
@@ -46,10 +30,7 @@ public class Pickler {
 
         try {
 
-            oos = new ObjectOutputStream(new FileOutputStream("/boink/resource/.data/" + data.getUUID() + ".ser"));
-
-            if (!reference.containsValue(data.getUUID()))
-                reference.put(data.getCommonName(), data.getUUID());
+            oos = new ObjectOutputStream(new FileOutputStream("/boink/resource/.data/" + session.getSessionId().toString() + ".ser"));
 
         } catch (FileNotFoundException e) {
             // logger
@@ -68,7 +49,7 @@ public class Pickler {
         }
 
         try {
-            oos.writeObject(data);
+            oos.writeObject(session);
         } catch (IOException e) {
             // logger
             throw new PickleException(ErrorCode.OBJECT_WRITE_ERROR);
@@ -85,26 +66,14 @@ public class Pickler {
     }
 
     // local implementation only. do DB
-    public static Object dePickle(String commonName) throws PickleException {
-
-        if (reference == null) {
-            // logger
-            throw new NullPointerException();
-        }
+    public static Session dePickle(Long sessionId) throws PickleException {
 
         ObjectInputStream ois = null;
-        BoinkObject o = null;
+        Session o = null;
 
         try {
 
-            String uuid;
-
-            if (reference.containsValue(commonName))
-                uuid = reference.get(commonName);
-            else
-                throw new PickleException(ErrorCode.PICKLE_REFERENCE_ERROR);
-
-            ois = new ObjectInputStream(new FileInputStream("/boink/resource/.data/" + uuid + ".ser"));
+            ois = new ObjectInputStream(new FileInputStream("/boink/resource/.data/" + sessionId.toString() + ".ser"));
 
         } catch (FileNotFoundException e) {
             // logger
@@ -124,7 +93,7 @@ public class Pickler {
 
         try {
 
-            o = (BoinkObject) ois.readObject();
+            o = (Session) ois.readObject();
 
         } catch (IOException e) {
             // logger

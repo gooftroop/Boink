@@ -2,7 +2,7 @@ package com.app.boink.client.connection;
 
 import com.app.boink.exception.ClientConnectException;
 import com.app.boink.exception.ErrorCode;
-import com.app.boink.model.data.BoinkObject;
+import com.app.boink.prototype.BoinkObject;
 
 /**
  * Created by goof_troop on 9/12/13.

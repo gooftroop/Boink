@@ -1,4 +1,4 @@
-package com.app.boink.model.data;
+package com.app.boink.prototype;
 
 import java.io.Serializable;
 
