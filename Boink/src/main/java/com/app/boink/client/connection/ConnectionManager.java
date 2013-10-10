@@ -1,7 +1,8 @@
 package com.app.boink.client.connection;
 
+import com.app.boink.client.main.Boink;
+import com.app.boink.exception.BoinkException;
 import com.app.boink.exception.ClientConnectException;
-import com.app.boink.exception.ErrorCode;
 import com.app.boink.prototype.BoinkObject;
 
 /**
@@ -10,35 +11,22 @@ import com.app.boink.prototype.BoinkObject;
 public class ConnectionManager {
 
     private Connection conn;
-    private static ConnectionManager instance = null;
+    private static final ConnectionManager instance = new ConnectionManager();
 
     /*
      *
      */
     public static ConnectionManager getInstance() throws ClientConnectException {
-
-        if (instance == null)
-            throw new ClientConnectException(ErrorCode.CONNECTION_CLIENT_INIT_ERROR);
-
         return instance;
-
     }
 
     /*
      *
      */
-    public void init(boolean isRemote) {
+    private ConnectionManager() {
 
-        if (instance != null)
-            instance = new ConnectionManager(isRemote);
-    }
-
-    /*
-     *
-     */
-    private ConnectionManager(boolean isRemote) {
         try {
-            conn = isRemote ? new RemoteAdapter() : new LocalAdapter();
+            conn = Boink.IS_LOCAL ? new LocalAdapter() : new RemoteAdapter();
         } catch (Exception e) {
             // logger
         }
@@ -47,54 +35,24 @@ public class ConnectionManager {
     /*
      *
      */
-    public boolean connect(String user, String password) {
-        return conn.connect(user, password);
-    }
-
-    /*
-     *
-     */
-    public boolean connect(int port, String url, String user, String password) {
+    public void connect(int port, String url, String user, String password) {
 
         try {
-            return conn.connect(port, url, user, password);
-        } catch (UnsupportedOperationException e) {
-            return connect(user, password);
+            conn.connect(port, url, user, password);
+        } catch (BoinkException e) {
+
         }
     }
 
     /*
      *
      */
-    public boolean write(BoinkObject data) {
-        return conn.write(data);
-    }
+    public void write(BoinkObject data) {
 
-    /*
-     *
-     */
-    public Object read() {
-        return conn.read();
-    }
+        try {
+            conn.write(data);
+        } catch (BoinkException e) {
 
-    /*
-     *
-     */
-    public int getPort() {
-        return conn.getPort();
-    }
-
-    /*
-     *
-     */
-    public int getIntAddr() {
-        return conn.getIntAddr();
-    }
-
-    /*
-     *
-     */
-    public boolean isAlive() {
-        return conn.isAlive();
+        }
     }
 }

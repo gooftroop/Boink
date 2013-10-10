@@ -7,7 +7,7 @@ public class AccountPacket extends BoinkPacket {
 
     // use this to transport account information and account updates, new auto transations
 
-    public AccountPacket(final long sessionId) {
+    public AccountPacket(final String sessionId) {
         super(sessionId);
     }
 }

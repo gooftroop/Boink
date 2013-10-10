@@ -1,6 +1,5 @@
 package com.app.boink.server.network;
 
-import com.app.boink.exception.PickleException;
 import com.app.boink.packet.AccountPacket;
 import com.app.boink.packet.AuthPacket;
 import com.app.boink.packet.BoinkPacket;
@@ -8,8 +7,7 @@ import com.app.boink.packet.ProfileUpdatePacket;
 import com.app.boink.packet.RegisterPacket;
 import com.app.boink.prototype.ConnectionEvent;
 import com.app.boink.prototype.ConnectionListener;
-import com.app.boink.prototype.Session;
-import com.app.boink.server.controller.Pickler;
+import com.app.boink.server.controller.SessionManager;
 
 /**
  * Created by goof_troop on 9/29/13.
@@ -22,19 +20,14 @@ public class ConnectionHandler implements ConnectionListener {
         BoinkPacket packet;
         Session session = null;
 
+        // getSource is merely getting the BoinkPacket that was written to the channel
         if ((packet = (BoinkPacket) evt.getSource()) == null) {
             //logger
-
         }
 
         try {
 
-            // try hash first, then depickle
-            session = Pickler.dePickle(packet.getSessonId());
-
-        } catch (PickleException e) {
-
-        } catch (NullPointerException e) {
+            session = SessionManager.getSession(packet.getSessonId());
 
         } catch (Exception e) {
 
@@ -42,6 +35,7 @@ public class ConnectionHandler implements ConnectionListener {
 
         if (session == null) {
             // logger
+            packet.success(false);
             evt.channel().write(packet);
         }
 

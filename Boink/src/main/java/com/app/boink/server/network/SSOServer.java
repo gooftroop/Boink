@@ -13,6 +13,7 @@ public class SSOServer {
 
     /*
     This server accepts connections from authentication or registration
+
     1. The client can only call this from the Logon activity. This is first called to obtain
         a password for the SSLEngine
     2. Is the fact that its only callable from the activity secure enough? Or do we need more authentication

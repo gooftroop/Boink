@@ -1,6 +1,9 @@
 package com.app.boink.server.network;
 
-import com.app.boink.server.controller.ConnectionManager;
+import com.app.boink.packet.BoinkPacket;
+import com.app.boink.server.controller.CommunicationManager;
+import com.app.boink.server.controller.DeviceManager;
+import com.app.boink.server.controller.SessionManager;
 
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
@@ -23,6 +26,30 @@ public class SessionContext extends SimpleChannelInboundHandler<Object> {
         The channel will then wait for write notification once the object has been processed
          */
 
-        ConnectionManager.addEventListener(ctx, new ConnectionHandler());
+        // decode this ( make sure this is encoded when set ). Should be final also.
+        String sessionId = ((BoinkPacket) o).getSessonId();
+        byte[] deviceId = ((BoinkPacket) o).getDeviceId();
+        Session s = null;
+
+        if (!SessionManager.containsSession(sessionId)) {
+            // log
+            // redirect? User must refresh login
+        }
+
+        s = SessionManager.getSession(sessionId);
+
+        if (s == null || !s.isValid()) {
+            // log
+            // redirect? User must refresh login
+        }
+
+        // check DeviceManager to ensure that the device ID are correct. The deviceId is unique to each client and
+        // shoud be nearly impossible to a) decode and b) recreate
+        if (!DeviceManager.isActive(deviceId) || deviceId != s.getDeviceId()) {
+            // log
+            // redirect? Unauthorized device
+        }
+
+        CommunicationManager.addEventListener(ctx, new ConnectionHandler());
     }
 }

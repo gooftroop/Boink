@@ -1,5 +1,6 @@
 package com.app.boink.client.connection;
 
+import com.app.boink.exception.BoinkException;
 import com.app.boink.prototype.BoinkObject;
 
 import io.netty.bootstrap.Bootstrap;
@@ -17,7 +18,12 @@ public class RemoteAdapter extends Connection {
     private Channel ch;
     private EventLoopGroup group;
 
+    private static boolean SSOenabled;
+
     public RemoteAdapter() {
+
+        SSOenabled = true;
+        ch = null;
 
         group = new NioEventLoopGroup();
 
@@ -27,40 +33,35 @@ public class RemoteAdapter extends Connection {
                 .handler(new ClientInitializer());
     }
 
-    /*
-     *
-     */
-    @Override
-    public boolean connect(String user, String password) {
-
-        // use user/password in socket connection, default url and port
-        return false;
-    }
+    // we only need to read here and not write back to the server. that's a seperate task.
 
     /*
      *
      */
-    public boolean connect(int port, String url, String user, String password) {
+    public void connect(int port, String url, String user, String password) throws BoinkException {
+
+        // We should not be connecting unless a SSO has occurred.
+        if (SSOenabled) {
+            // logger
+            throw new BoinkException("");
+        }
 
         try {
             ch = b.connect(url, port).sync().channel();
         } catch (InterruptedException e) {
             // logger
-            return false;
+            ch = null;
+            throw new BoinkException(e.getMessage());
         }
-
-        if (b == null)
-            return false;
-
-        return true;
     }
 
-    public void close() {
+    public void close() throws BoinkException {
 
         try {
             ch.closeFuture().sync();
         } catch (InterruptedException e) {
             // logger
+            throw new BoinkException(e.getMessage());
         }
 
         group.shutdownGracefully();
@@ -70,53 +71,43 @@ public class RemoteAdapter extends Connection {
      *
      */
     @Override
-    public boolean write(BoinkObject data) {
+    public void write(BoinkObject data) throws BoinkException {
 
-        return false;
+        if (data == null) {
+            // logger
+            throw new BoinkException("");
+        }
+
+        if (ch == null) {
+            // logger
+            throw new BoinkException("");
+        }
+
+        ch.write(data);
     }
 
-    public boolean write(String msg) {
+    public void write(int port, String url, String msg) throws BoinkException {
+
+        if (!SSOenabled) {
+            // logger
+            throw new BoinkException("");
+        }
+
 
         // write for SSO. This is obfuscated for security
         // encrypt? right now server and client have different encryption slat and password...we can't
         // encrypt using the existing AES since we're not garaunteed that its readable. So how do we deal with this?
 
-        return false;
-    }
+        try {
+            ch = b.connect(url, port).sync().channel();
+        } catch (InterruptedException e) {
+            // logger
+            throw new BoinkException(e.getMessage());
+        }
 
-    /*
-     *
-     */
-    @Override
-    public Object read() {
+        ch.write(msg);
+        SSOenabled = false;
+        ch = null;
 
-        // read. If its a String, we've got SSO going. it should be encrypted
-        // If its a BoinkObject, its normal operations
-
-        return null;
-    }
-
-    /*
-     *
-     */
-    @Override
-    public int getPort() {
-        return 0;
-    }
-
-    /*
-     *
-     */
-    @Override
-    public int getIntAddr() {
-        return 0;
-    }
-
-    /*
-     *
-     */
-    @Override
-    public boolean isAlive() {
-        return false;
     }
 }

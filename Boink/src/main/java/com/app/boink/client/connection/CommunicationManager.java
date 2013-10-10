@@ -1,4 +1,4 @@
-package com.app.boink.server.controller;
+package com.app.boink.client.connection;
 
 import com.app.boink.prototype.ConnectionEvent;
 import com.app.boink.prototype.ConnectionListener;
@@ -9,20 +9,20 @@ import io.netty.channel.ChannelHandlerContext;
 /**
  * Created by goof_troop on 9/12/13.
  */
-public final class ConnectionManager {
+public final class CommunicationManager {
 
-    private static EventListenerList listenerList = new EventListenerList();
-    private static ConnectionManager self = null;
+    private static EventListenerList listenerList;
+    private static final CommunicationManager self = new CommunicationManager();
 
-    public ConnectionManager() {
-        self = this;
+    private CommunicationManager() {
+        listenerList = new EventListenerList();
     }
 
 
-    public synchronized static void connect(ChannelHandlerContext ctx) {
+    public synchronized static void connect(Object source, ChannelHandlerContext ctx) {
 
         if (ctx != null)
-            fireCommunicationEvent(ctx);
+            fireCommunicationEvent(source, ctx);
     }
 
     public synchronized static void addEventListener(ChannelHandlerContext ctx, ConnectionListener listener) {
@@ -33,7 +33,7 @@ public final class ConnectionManager {
         listenerList.remove(ctx, listener);
     }
 
-    private static synchronized void fireCommunicationEvent(ChannelHandlerContext ctx) {
+    private static synchronized void fireCommunicationEvent(Object source, ChannelHandlerContext ctx) {
 
         Object[] listeners = listenerList.getListenerList();
 

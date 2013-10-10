@@ -1,7 +1,7 @@
 package com.app.boink.server.network;
 
 import com.app.boink.packet.BoinkPacket;
-import com.app.boink.server.controller.ConnectionManager;
+import com.app.boink.server.controller.CommunicationManager;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -12,7 +12,7 @@ import io.netty.channel.SimpleChannelInboundHandler;
 /**
  * Handles a server-side channel.
  */
-public class ServerHandler extends SimpleChannelInboundHandler<BoinkPacket> {
+public final class ServerHandler extends SimpleChannelInboundHandler<BoinkPacket> {
 
     public ServerHandler() {
 
@@ -24,13 +24,18 @@ public class ServerHandler extends SimpleChannelInboundHandler<BoinkPacket> {
         // fire off a new communication event.
         // the event should have the session id to work on and
         // the information to work with
-        ConnectionManager.connect(ctx);
+        CommunicationManager.connect(o, ctx);
 
     }
 
     @Override
     public void channelReadComplete(ChannelHandlerContext ctx) throws Exception {
         ctx.flush();
+    }
+
+    @Override
+    public void channelUnregistered(ChannelHandlerContext ctx) {
+        CommunicationManager.removeEventListener(ctx);
     }
 
     @Override

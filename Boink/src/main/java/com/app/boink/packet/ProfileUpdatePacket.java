@@ -9,7 +9,7 @@ public class ProfileUpdatePacket extends BoinkPacket {
 
     private HashMap<String, String> info;
 
-    public ProfileUpdatePacket(HashMap<String, String> info, final long sessionId) {
+    public ProfileUpdatePacket(HashMap<String, String> info, final String sessionId) {
 
         super(sessionId);
 

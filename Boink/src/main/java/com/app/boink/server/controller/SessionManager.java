@@ -1,6 +1,6 @@
 package com.app.boink.server.controller;
 
-import com.app.boink.prototype.Session;
+import com.app.boink.server.network.Session;
 
 import java.util.HashMap;
 
@@ -16,35 +16,30 @@ public class SessionManager {
         map = new HashMap<String, Session>();
     }
 
-    public static Session getSession(String uuid) {
+    public static boolean containsSession(String sessionId) {
+        return sessionId == null && map.containsKey(sessionId);
+    }
 
-        if (map == null || !map.containsKey(uuid)) {
+    public static Session getSession(String sessionId) {
+
+        if (map == null || !map.containsKey(sessionId)) {
             // logger
             throw new NullPointerException();
         }
 
-        return map.get(uuid);
+        return map.get(sessionId);
 
     }
 
-    public static void setSession(String uuid, Session s) {
+    public static void setSession(String sessionId, Session s) {
 
-        if (uuid == null || s == null) {
+        if (sessionId == null || s == null) {
             // logger
             throw new NullPointerException();
         }
 
-        if (!map.containsKey(uuid))
-            map.put(uuid, s);
+        if (!map.containsKey(sessionId))
+            map.put(sessionId, s);
 
-    }
-
-    public static void invalidate(String uuid) {
-
-        if (uuid == null)
-            return;
-
-        map.put(uuid, null);
-        map.remove(uuid);
     }
 }

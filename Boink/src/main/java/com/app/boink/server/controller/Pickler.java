@@ -2,7 +2,7 @@ package com.app.boink.server.controller;
 
 import com.app.boink.exception.ErrorCode;
 import com.app.boink.exception.PickleException;
-import com.app.boink.prototype.Session;
+import com.app.boink.server.network.Session;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -16,9 +16,6 @@ import java.io.ObjectOutputStream;
  */
 public class Pickler {
 
-    public Pickler() {
-    }
-
     public static void pickle(Session session) throws PickleException {
 
         if (session == null) {
@@ -30,7 +27,7 @@ public class Pickler {
 
         try {
 
-            oos = new ObjectOutputStream(new FileOutputStream("/boink/resource/.data/" + session.getSessionId().toString() + ".ser"));
+            oos = new ObjectOutputStream(new FileOutputStream("/boink/resource/.data/" + session.getSessionId() + ".ser"));
 
         } catch (FileNotFoundException e) {
             // logger
@@ -66,14 +63,14 @@ public class Pickler {
     }
 
     // local implementation only. do DB
-    public static Session dePickle(Long sessionId) throws PickleException {
+    public static Session dePickle(String sessionId) throws PickleException {
 
         ObjectInputStream ois = null;
         Session o = null;
 
         try {
 
-            ois = new ObjectInputStream(new FileInputStream("/boink/resource/.data/" + sessionId.toString() + ".ser"));
+            ois = new ObjectInputStream(new FileInputStream("/boink/resource/.data/" + sessionId + ".ser"));
 
         } catch (FileNotFoundException e) {
             // logger

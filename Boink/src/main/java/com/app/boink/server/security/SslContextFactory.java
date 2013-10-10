@@ -19,6 +19,7 @@ public final class SslContextFactory {
 
     private static final String PROTOCOL = "TLS";
     private static final SSLContext CONTEXT;
+    private static SecureRandom sec;
 
     static {
 
@@ -36,7 +37,7 @@ public final class SslContextFactory {
             ks = KeyStore.getInstance("JKS");
             ts = KeyStore.getInstance("JKS");
 
-            SecureRandom sec = SecureRandom.getInstance("SHA1PRNG", "SUN");
+            sec = SecureRandom.getInstance("SHA1PRNG", "SUN");
             sec.nextBytes(new byte[64]);
             byte[] seed = sec.generateSeed(64);
 
@@ -73,5 +74,10 @@ public final class SslContextFactory {
 
     public static SSLContext getContext() {
         return CONTEXT;
+    }
+
+    // returning mutable object?
+    public static SecureRandom getSecureRandom() {
+        return sec;
     }
 }

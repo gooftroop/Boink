@@ -5,16 +5,25 @@ package com.app.boink.packet;
  */
 public abstract class BoinkPacket {
 
-    private final long sessonId;
+    // really want this to be final and every new packet uses this. This way the sessionId is set once
+    // and not visible or passed around in upper levels.
+
+    private final byte[] deviceId;
+    private final String sessonId;
     private boolean updated;
 
-    public BoinkPacket(final long sessionId) {
+    public BoinkPacket(final String sessionId, final byte[] deviceId) {
         updated = false;
         this.sessonId = sessionId;
+        this.deviceId = deviceId;
     }
 
-    public long getSessonId() {
+    public String getSessonId() {
         return sessonId;
+    }
+
+    public byte[] getDeviceId() {
+        return deviceId;
     }
 
     public void success(boolean updated) {

@@ -10,7 +10,7 @@ public class AuthPacket extends BoinkPacket {
 
     private boolean authd;
 
-    public AuthPacket(final String userName, final String password, final long sessionId) {
+    public AuthPacket(final String userName, final String password, final String sessionId) {
 
         super(sessionId);
 

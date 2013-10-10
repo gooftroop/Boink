@@ -1,5 +1,7 @@
 package com.app.boink.prototype;
 
+import com.app.boink.server.network.LocalServer;
+
 import java.util.EventObject;
 
 import io.netty.channel.ChannelHandlerContext;
@@ -9,15 +11,19 @@ import io.netty.channel.ChannelHandlerContext;
  */
 public class ConnectionEvent extends EventObject {
 
-    private final ChannelHandlerContext ctx;
+    private final Object ctx;
 
-    public ConnectionEvent(Object source, ChannelHandlerContext ctx) {
+    public ConnectionEvent(Object source, Object ctx) {
         super(source);
 
         this.ctx = ctx;
     }
 
     public ChannelHandlerContext channel() {
-        return ctx;
+        return (ChannelHandlerContext) ctx;
+    }
+
+    public LocalServer server() {
+        return (LocalServer) ctx;
     }
 }

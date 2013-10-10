@@ -8,7 +8,7 @@ public class RegisterPacket extends BoinkPacket {
     private String userName;
     private String password;
 
-    public RegisterPacket(String userName, String password, final long sessionId) {
+    public RegisterPacket(String userName, String password, final String sessionId) {
 
         super(sessionId);
 

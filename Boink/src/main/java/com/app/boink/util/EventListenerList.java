@@ -95,7 +95,7 @@ import java.lang.reflect.Array;
  * @author Hans Muller
  * @author James Gosling
  */
-public class EventListenerList implements Serializable {
+public final class EventListenerList implements Serializable {
 
     /* A null array to be shared by all empty listener lists*/
     private final static Object[] NULL_ARRAY = new Object[0];
@@ -172,6 +172,7 @@ public class EventListenerList implements Serializable {
             if (t.equals(list[i]))
                 count++;
         }
+
         return count;
     }
 
@@ -198,10 +199,17 @@ public class EventListenerList implements Serializable {
 
         } else {
 
-            // Otherwise copy the array and add the new listener
             int i = listenerList.length;
             Object[] tmp = new Object[i + 2];
+
+            // Check to see if the key ( l ) and the value ( t ) already exists
+            for (int j = 0; j < i / 2; j += 2)
+                if (tmp[j].equals(l) && tmp[j + 1].equals(t))
+                    return;
+
+            // Otherwise copy the array and add the new listener
             System.arraycopy(listenerList, 0, tmp, 0, i);
+            listenerList = null;
 
             tmp[i] = t;
             tmp[i + 1] = l;

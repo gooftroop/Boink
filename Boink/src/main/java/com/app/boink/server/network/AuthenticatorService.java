@@ -1,7 +1,6 @@
 package com.app.boink.server.network;
 
 import com.app.boink.prototype.Profile;
-import com.app.boink.prototype.Session;
 
 import java.util.HashMap;
 

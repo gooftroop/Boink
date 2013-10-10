@@ -14,6 +14,14 @@ public class ClientHandler extends SimpleChannelInboundHandler<Object> {
     @Override
     public void channelRead0(ChannelHandlerContext ctx, Object o) throws Exception {
 
+        // fire off a new communication event.
+        // the event should have the session id to work on and
+        // the information to work with
+        CommunicationManager.connect(o, ctx);
+    }
+
+    public void channelUnregistered(ChannelHandlerContext ctx) {
+        com.app.boink.server.controller.CommunicationManager.removeEventListener(ctx);
     }
 
     @Override

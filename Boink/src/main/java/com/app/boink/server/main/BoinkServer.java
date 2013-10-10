@@ -9,6 +9,8 @@ package com.app.boink.server.main;
 // both the main for the server and client need to make sure boink dir exists
 public class BoinkServer {
 
+    public static boolean IS_LOCAL = false;
+
     public static void main(String[] args) {
 
     }
