@@ -12,6 +12,7 @@ public class ConfigFileLocator {
 
     @NotNull
     static InputStream getInputStream(final String name) throws FileNotFoundException {
+
         final String confPath = System.getProperty(CONF_PATH_PROPERTY);
         final InputStream stream;
 

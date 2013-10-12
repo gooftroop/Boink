@@ -8,5 +8,5 @@ public class ConfigProperties extends Properties {
             super(e);
         }
     }
-    public static enum Domain {LDAP, REPOSITORY, X509, TREE}
+    public static enum Domain {REPOSITORY, X509, TREE}
 }

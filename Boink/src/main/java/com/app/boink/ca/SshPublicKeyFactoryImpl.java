@@ -14,15 +14,17 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.Formatter;
+import java.util.logging.Logger;
 
 @Slf4j
 @Singleton
 public class SshPublicKeyFactoryImpl implements SshPublicKeyFactory {
+
     private static final String PROP_PATH = "repo.keypath";
     private final ConfigProperties configProperties;
 
-    String getSshPublicKeyText(@NonNull final String user)
-            throws SshPublicKey.SshPublicKeyLoadingException {
+    String getSshPublicKeyText(@NonNull final String user) throws SshPublicKey.SshPublicKeyLoadingException {
+
         final Formatter formatter = new Formatter();
         final String path = formatter.format(configProperties.getProperty(PROP_PATH), user).toString();
         String line = null;
@@ -42,7 +44,7 @@ public class SshPublicKeyFactoryImpl implements SshPublicKeyFactory {
                 try {
                     reader.close();
                 } catch (IOException e) {
-                    SshPublicKeyFactoryImpl.log.error("{} {}", e.toString(), Arrays.toString(e.getStackTrace()));
+                    Logger.getAnonymousLogger().warning(e.toString() + Arrays.toString(e.getStackTrace()));
                 }
             }
         }
@@ -50,14 +52,12 @@ public class SshPublicKeyFactoryImpl implements SshPublicKeyFactory {
     }
 
     @NotNull
-    public SshPublicKey get(@NonNull final String user)
-            throws ConfigProperties.ConfigLoadingException, SshPublicKey.SshPublicKeyLoadingException {
+    public SshPublicKey get(@NonNull final String user) throws ConfigProperties.ConfigLoadingException, SshPublicKey.SshPublicKeyLoadingException {
         return new SshPublicKey(getSshPublicKeyText(user));
     }
 
     @Inject
-    SshPublicKeyFactoryImpl(ConfigPropertiesFactory configPropertiesFactory)
-            throws FileNotFoundException, ConfigProperties.ConfigLoadingException {
+    SshPublicKeyFactoryImpl(ConfigPropertiesFactory configPropertiesFactory) throws FileNotFoundException, ConfigProperties.ConfigLoadingException {
         this.configProperties = configPropertiesFactory.get(ConfigProperties.Domain.REPOSITORY);
     }
 }

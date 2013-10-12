@@ -10,7 +10,7 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" exported="" name="support-v4-13.0.0" level="project" />
     <orderEntry type="library" exported="" name="netty" level="project" />
-    <orderEntry type="library" name="bcprov-jdk15on-149" level="project" />
+    <orderEntry type="library" name="bouncycastle" level="project" />
     <orderEntry type="library" name="commons-codec-1.8" level="project" />
   </component>
 </module>

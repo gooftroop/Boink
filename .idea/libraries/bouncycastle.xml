@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="bouncycastle">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/Boink/libs/bcprov-jdk15on-149.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

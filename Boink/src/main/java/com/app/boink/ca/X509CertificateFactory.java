@@ -1,12 +1,14 @@
 package com.app.boink.ca;
 
+import com.app.boink.exception.XCISException;
+
 import lombok.NonNull;
 import org.jetbrains.annotations.NotNull;
 
-import javax.naming.NamingException;
-import java.security.GeneralSecurityException;
+import java.security.cert.X509Certificate;
+import java.util.HashMap;
 
 public interface X509CertificateFactory {
     @NotNull
-    X509Certificate get(@NonNull UserInfo infos) throws GeneralSecurityException, NamingException, SshPublicKey.SshPublicKeyLoadingException, ConfigProperties.ConfigLoadingException;
+    X509Certificate get(@NonNull HashMap<String, String> infos) throws XCISException;
 }
