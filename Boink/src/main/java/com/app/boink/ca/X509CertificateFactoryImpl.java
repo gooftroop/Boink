@@ -4,8 +4,13 @@ import com.app.boink.exception.XCISException;
 import com.eaio.uuid.UUID;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+
+import org.bouncycastle.asn1.DERIA5String;
 import org.bouncycastle.asn1.DERObjectIdentifier;
+import org.bouncycastle.asn1.DEROctetString;
 import org.bouncycastle.asn1.x509.BasicConstraints;
+import org.bouncycastle.asn1.x509.GeneralName;
+import org.bouncycastle.asn1.x509.GeneralNames;
 import org.bouncycastle.asn1.x509.X509Extensions;
 import org.bouncycastle.jce.X509Principal;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
@@ -167,10 +172,11 @@ public class X509CertificateFactoryImpl implements X509CertificateFactory, Passw
         attrsHash.put(X509Principal.OU, infos.get("groups"));
         attrsVector.add(X509Principal.OU);
 
-        attrsHash.put(X509Principal.SN, infos.get("deviceid"));
-        attrsVector.add(X509Principal.SN);
-
         generator.setSubjectDN(new X509Principal(attrsVector, attrsHash));
+
+        // create a SubjectAlternativeName extension value
+        GeneralNames subjectAltNames = new GeneralNames( new GeneralName(GeneralName.rfc822Name, new DERIA5String(infos.get("deviceId"))));
+        generator.addExtension(X509Extensions.SubjectAlternativeName, false, new DEROctetString(subjectAltNames));
 
         calendar.add(Calendar.HOUR, -hoursBefore);
         generator.setNotBefore(calendar.getTime());

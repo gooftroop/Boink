@@ -5,10 +5,17 @@ import com.app.boink.client.security.InfoProvider;
 import com.app.boink.exception.BoinkException;
 
 import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.io.IOUtils;
 
+import java.io.ByteArrayInputStream;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.security.SecureRandom;
+import java.security.cert.CertificateException;
+import java.security.cert.CertificateFactory;
+import java.security.cert.CertificateParsingException;
 import java.security.cert.X509Certificate;
 import java.util.Observable;
 import java.util.Observer;
@@ -17,6 +24,8 @@ import java.util.Observer;
  * Created by goof_troop on 10/11/13.
  */
 public class Boink implements Observer {
+
+    private String CERT_PATH = "/";
 
     // Keep all contstants private to prevent any possible alteration
     public static final boolean IS_LOCAL;
@@ -38,8 +47,8 @@ public class Boink implements Observer {
 
     // Internal static variables. deviceId and the x509 Certificate server as authorization keys
     // to the server. If the connection is internal, these will be null.
-    private final byte[] deviceId;
-    private final X509Certificate deviceCertificate;
+    private byte[] deviceId;
+    private X509Certificate deviceCertificate;
 
     // Do these need to exist beyond the server check?
     private final String username;
@@ -53,8 +62,43 @@ public class Boink implements Observer {
         username = "";
         password = "";
 
-        deviceId = null;
-        deviceCertificate = null;
+        FileInputStream fis = null;
+        ByteArrayInputStream bais = null;
+
+        try {
+
+            // use FileInputStream to read the file
+            fis = new FileInputStream(CERT_PATH);
+
+            // read the bytes
+            byte value[] = new byte[fis.available()];
+            fis.read(value);
+            bais = new ByteArrayInputStream(value);
+
+            // get X509 certificate factory
+            CertificateFactory certFactory = CertificateFactory.getInstance("X.509");
+
+            // certificate factory can now create the certificate
+            deviceCertificate = (X509Certificate)certFactory.generateCertificate(bais);
+
+        } catch (IOException e) {
+            // logger
+            return;
+        } catch (CertificateException e) {
+            // logger
+            return;
+        } finally {
+            IOUtils.closeQuietly(fis);
+            IOUtils.closeQuietly(bais);
+        }
+
+        // Pull the device ID out from the SubjectAltName field of the device Certificate
+        try {
+            deviceId = (byte[])deviceCertificate.getSubjectAlternativeNames().toArray()[0];
+        } catch (CertificateParsingException e) {
+            // logger
+            return;
+        }
 
         // find or create deviceID
         // do the SSO and obtain session Id
