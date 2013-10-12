@@ -1,29 +1,31 @@
 package com.app.boink.packet;
 
+import com.app.boink.client.main.Boink;
+import com.app.boink.client.security.InfoProvider;
+
+import java.util.Arrays;
+
 /**
  * Created by goof_troop on 9/26/13.
  */
 public abstract class BoinkPacket {
 
-    // really want this to be final and every new packet uses this. This way the sessionId is set once
-    // and not visible or passed around in upper levels.
+    private static final byte[] deviceId = InfoProvider.getDeviceId();
+    private static final String sessionId = InfoProvider.getSessionId();
 
-    private final byte[] deviceId;
-    private final String sessonId;
     private boolean updated;
 
-    public BoinkPacket(final String sessionId, final byte[] deviceId) {
+    public BoinkPacket() {
+
         updated = false;
-        this.sessonId = sessionId;
-        this.deviceId = deviceId;
     }
 
-    public String getSessonId() {
-        return sessonId;
+    protected String getSessionId() {
+        return sessionId;
     }
 
-    public byte[] getDeviceId() {
-        return deviceId;
+    protected byte[] getDeviceId() {
+        return Arrays.copyOf(deviceId, Boink.FIELD_LENGTH);
     }
 
     public void success(boolean updated) {

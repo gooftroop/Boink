@@ -61,7 +61,7 @@ public class CryptoManager implements Observer {
 
     private void reKey() {
         // on update, reKey every file within
-        // if we are local, check /Boink/.data files and re-encrypt
+        // if we are local, check /Home/.data files and re-encrypt
         // If we are a server, open DB and re-encrypt
     }
 

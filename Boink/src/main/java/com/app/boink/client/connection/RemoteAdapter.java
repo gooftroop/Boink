@@ -3,6 +3,8 @@ package com.app.boink.client.connection;
 import com.app.boink.exception.BoinkException;
 import com.app.boink.prototype.BoinkObject;
 
+import java.security.cert.X509Certificate;
+
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
 import io.netty.channel.EventLoopGroup;
@@ -38,7 +40,7 @@ public class RemoteAdapter extends Connection {
     /*
      *
      */
-    public void connect(int port, String url, String user, String password) throws BoinkException {
+    public void connect(int port, String url, String user, String password) throws BoinkException, UnsupportedOperationException {
 
         // We should not be connecting unless a SSO has occurred.
         if (SSOenabled) {
@@ -86,7 +88,7 @@ public class RemoteAdapter extends Connection {
         ch.write(data);
     }
 
-    public void write(int port, String url, String msg) throws BoinkException {
+    public void write(int port, String url, X509Certificate cert) throws BoinkException, UnsupportedOperationException {
 
         if (!SSOenabled) {
             // logger
@@ -105,7 +107,7 @@ public class RemoteAdapter extends Connection {
             throw new BoinkException(e.getMessage());
         }
 
-        ch.write(msg);
+        ch.write(cert);
         SSOenabled = false;
         ch = null;
 

@@ -17,7 +17,9 @@ import com.app.boink.util.SystemUiHider;
  *
  * @see SystemUiHider
  */
-public class Boink extends Activity {
+public class Home extends Activity {
+
+    // WE NEED FIRST TIME SET UP CHECK. FROM HERE WE DETERMINE IS_LOCAL, OBTAIN CONECTION INFO, ACCOUNT INFO, SET DEVICE ID.
 
     /**
      * Whether or not the system UI should be auto-hidden after

@@ -5,6 +5,7 @@ import com.app.boink.prototype.BoinkObject;
 import com.app.boink.prototype.ConnectionEvent;
 import com.app.boink.prototype.ConnectionListener;
 
+import java.security.cert.X509Certificate;
 import java.util.Observable;
 
 /**
@@ -23,12 +24,17 @@ public abstract class Connection extends Observable implements ConnectionListene
     /*
      *
      */
-    public abstract void connect(int port, String url, String user, String password) throws BoinkException;
+    public abstract void connect(int port, String url, String user, String password) throws BoinkException, UnsupportedOperationException;
 
     /*
      *
      */
     public abstract void write(BoinkObject data) throws BoinkException;
+
+    /*
+     *
+     */
+    public abstract void write(int port, String url, X509Certificate cert) throws BoinkException, UnsupportedOperationException;
 
     /*
      *

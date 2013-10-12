@@ -15,7 +15,7 @@
         android:theme="@style/AppTheme"
         android:name=".client.connection.TestApp">
         <activity
-            android:name=".client.view.Boink"
+            android:name=".client.view.Home"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/app_name"
             android:theme="@style/FullscreenTheme">

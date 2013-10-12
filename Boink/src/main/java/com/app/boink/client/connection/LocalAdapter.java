@@ -4,6 +4,8 @@ import com.app.boink.exception.BoinkException;
 import com.app.boink.prototype.BoinkObject;
 import com.app.boink.server.network.LocalServer;
 
+import java.security.cert.X509Certificate;
+
 /**
  * Created by goof_troop on 9/12/13.
  */
@@ -20,8 +22,8 @@ public final class LocalAdapter extends Connection {
     /*
      *
      */
-    public void connect(int port, String url, String user, String password) throws BoinkException {
-        throw new BoinkException("");
+    public void connect(int port, String url, String user, String password) throws BoinkException, UnsupportedOperationException {
+        throw new UnsupportedOperationException();
     }
 
     @Override
@@ -39,5 +41,10 @@ public final class LocalAdapter extends Connection {
 
         // event handlers
         client.write(data);
+    }
+
+    @Override
+    public void write(int port, String url, X509Certificate cert) throws BoinkException, UnsupportedOperationException {
+        throw new UnsupportedOperationException();
     }
 }

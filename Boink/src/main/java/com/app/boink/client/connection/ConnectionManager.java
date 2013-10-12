@@ -2,8 +2,9 @@ package com.app.boink.client.connection;
 
 import com.app.boink.client.main.Boink;
 import com.app.boink.exception.BoinkException;
-import com.app.boink.exception.ClientConnectException;
 import com.app.boink.prototype.BoinkObject;
+
+import java.security.cert.X509Certificate;
 
 /**
  * Created by goof_troop on 9/12/13.
@@ -16,7 +17,7 @@ public class ConnectionManager {
     /*
      *
      */
-    public static ConnectionManager getInstance() throws ClientConnectException {
+    public static ConnectionManager getInstance() {
         return instance;
     }
 
@@ -51,6 +52,19 @@ public class ConnectionManager {
 
         try {
             conn.write(data);
+        } catch (BoinkException e) {
+
+        }
+    }
+
+    public void write(int port, String url, X509Certificate cert, Boink caller) throws BoinkException, UnsupportedOperationException {
+
+        conn.addObserver(caller);
+
+        try {
+            conn.write(port, url, cert);
+        } catch (UnsupportedOperationException e) {
+
         } catch (BoinkException e) {
 
         }

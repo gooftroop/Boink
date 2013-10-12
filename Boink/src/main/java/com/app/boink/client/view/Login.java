@@ -24,6 +24,8 @@ import com.app.boink.client.connection.Authenticator;
  */
 public class Login extends Activity {
 
+    // SSO NEEDS TO HAPPEN HERE
+
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
      */
@@ -40,7 +42,7 @@ public class Login extends Activity {
     private View mLoginStatusView;
     private TextView mLoginStatusMessageView;
 
-    private int PASSWORDLENGTH = 8;
+    private int PASSWORDLENGTH = 16;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

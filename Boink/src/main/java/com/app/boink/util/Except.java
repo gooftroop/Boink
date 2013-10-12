@@ -7,7 +7,7 @@ import java.util.logging.Logger;
  */
 // Exception handler. Log and throw the exception
 // Any exception that occurs thats not immediately wrapped into a custom exception will get passed
-// into here to get logged then thrown as a Boink Exception
+// into here to get logged then thrown as a Home Exception
 public class Except {
 
     private static final Logger logger = Logger.getLogger(Except.class.getName());
